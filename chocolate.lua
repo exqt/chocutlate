@@ -4,7 +4,7 @@ local RectObject = require 'rect-object'
 local Chocolate = Class('Chocolate', RectObject)
 
 local size = 16
-local image = love.graphics.newImage('assets/chocolate.png')
+local image = assets.images.chocolate
 local piecesQuads = {
   love.graphics.newQuad(     0, 0, size, size, image:getDimensions()),
   love.graphics.newQuad(  size, 0, size, size, image:getDimensions()),
