@@ -3,7 +3,8 @@ require 'global'
 local Scene = require 'scene'
 local scene = Scene()
 local RectObject = require 'rect-object'
-scene:addObjecct(RectObject(10, 10, 50, 50))
+local Chocolate = require 'chocolate'
+scene:addObjecct(Chocolate(0, 0, 6, 9, os.time()))
 
 function love.load()
 
