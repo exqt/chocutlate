@@ -1,10 +1,13 @@
 require 'global'
 
 local Scene = require 'scene'
+local Camera = require 'camera'
 scene = Scene()
 local RectObject = require 'rect-object'
 local Chocolate = require 'chocolate'
-scene:addObjecct(Chocolate(0, 0, 6, 9, os.time()))
+local chocolate = Chocolate(0, 0, 6, 9, os.time())
+scene:addObjecct(chocolate)
+scene.camera:setPosition(chocolate:getCenterPosition())
 
 function love.load(args)
   for k, v in ipairs(args) do

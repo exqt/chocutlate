@@ -1,6 +1,6 @@
 local RectObject = require 'rect-object'
 
----@class Chocolate
+---@class Chocolate : RectObject
 local Chocolate = Class('Chocolate', RectObject)
 
 local size = 16
@@ -12,7 +12,7 @@ local piecesQuads = {
 }
 
 function Chocolate:initialize(x, y, r, c, seed)
-  RectObject.initialize(self, x, y, r*size, c*size)
+  RectObject.initialize(self, x, y, c*size, r*size)
   self.r, self.c = r, c
   self.seed = seed
   self.pieces = {}

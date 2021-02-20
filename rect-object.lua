@@ -8,6 +8,14 @@ function RectObject:initialize(x, y, w, h)
   self.w, self.h = w, h
 end
 
+function RectObject:getCenterPosition()
+  return self.x + self.w/2, self.y + self.h/2
+end
+
+function RectObject:getDimensions()
+  return self.w, self.h
+end
+
 function RectObject:update(dt)
 
 end
