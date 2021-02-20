@@ -26,15 +26,6 @@ function Scene:update(dt)
 end
 
 function Scene:draw()
-  self.camera:clear(0.2, 0.2, 0.2)
-  self.camera:render(function()
-    for i=#self.objects, 1, -1 do
-      local obj = self.objects[i]
-      obj:draw()
-    end
-    love.graphics.circle("fill", 0, 0, 8)
-  end)
-  self.camera:draw()
 end
 
 return Scene

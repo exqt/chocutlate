@@ -51,6 +51,18 @@ function ChocolateData:get(r, c)
   return self.pieces[self.pr+r-1][self.pc+c-1]
 end
 
+function ChocolateData:sum()
+  local ret = {0, 0, 0}
+  local r, c = self:getDimensions()
+  for i=1, r do
+    for j=1, c do
+      local t = self:get(i, j)
+      ret[t] = ret[t] + 1
+    end
+  end
+  return ret
+end
+
 function ChocolateData:cut(orientation, p)
   local r, c = self:getDimensions()
   if orientation == 'horizonal' then
@@ -65,6 +77,11 @@ function ChocolateData:cut(orientation, p)
       ChocolateData(self.pieces, self.pr, self.pc    , self.qr, self.pc + p - 1),
       ChocolateData(self.pieces, self.pr, self.pc + p, self.qr, self.qc        )
   end
+end
+
+function ChocolateData:isCollectable()
+  local s = self:sum()
+  return s[1] <= 1 and s[2] <= 1 and s[3] <= 1
 end
 
 function ChocolateData:getDimensions()

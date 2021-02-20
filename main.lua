@@ -1,14 +1,11 @@
 require 'global'
 
-local Scene = require 'scene'
+local font = assets.fonts.fixedsys(16)
+love.graphics.setFont(font)
+
+local GameScene = require 'game-scene'
 local Camera = require 'camera'
-scene = Scene()
-local RectObject = require 'rect-object'
-local ChocolateObject = require 'chocolate-object'
-local ChocolateData = require 'chocolate-data'
-local chocolate = ChocolateObject(0, 0, ChocolateData())
-scene:addObject(chocolate)
-scene.camera:setPosition(chocolate:getCenterPosition())
+scene = GameScene()
 
 function love.load(args)
   for k, v in ipairs(args) do

@@ -1,5 +1,6 @@
 input = require 'input'
 Class = require 'lib.middleclass'
+Event = require 'lib.eventy'
 assets = require('lib.cargo').init({
   dir = 'assets',
   processors = {

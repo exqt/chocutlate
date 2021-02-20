@@ -1,7 +1,7 @@
-local RectObject = require 'rect-object'
+local Super = require 'rect-object'
 
 ---@class ChocolateObject : RectObject
-local ChocolateObject = Class('Chocolate', RectObject)
+local ChocolateObject = Class('Chocolate', Super)
 
 local size = 16
 local image = assets.images.chocolate
@@ -11,11 +11,23 @@ local piecesQuads = {
   love.graphics.newQuad(2*size, 0, size, size, image:getDimensions()),
 }
 
----@param chocolateData ChocolateData
-function ChocolateObject:initialize(x, y, chocolateData)
-  self.data = chocolateData
+function ChocolateObject:initialize(x, y, chocolateData, state)
+  self.data = chocolateData ---@type ChocolateData
   self.r, self.c = chocolateData:getDimensions()
-  RectObject.initialize(self, x, y, self.c*size, self.r*size)
+  Super.initialize(self, x, y, self.c*size, self.r*size)
+
+  if self.data:isCollectable() then
+    self:destroy()
+    return
+  end
+
+  self.state = state
+  self.eTagCut = self.state.onCut:add(self, self.onCut)
+end
+
+function ChocolateObject:destroy()
+  if self.eTagCut then self.state.onCut:remove(self.eTagCut) end
+  Super.destroy(self)
 end
 
 function ChocolateObject:findCutline()
@@ -34,17 +46,22 @@ function ChocolateObject:findCutline()
   end
 end
 
-function ChocolateObject:cut(orientation, p)
+function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
+  if self.data ~= chocolateData then return end
+
   if orientation == 'horizonal' then
-    local d1, d2 = self.data:cut(orientation, p)
-    local o1 = ChocolateObject(self.x, self.y - 4, d1)
-    local o2 = ChocolateObject(self.x, self.y + p*size + 4, d2)
-    return o1, o2
+    local o1 = ChocolateObject(self.x, self.y - 4, d1, self.state)
+    local o2 = ChocolateObject(self.x, self.y + p*size + 4, d2, self.state)
+    self.scene:addObject(o1)
+    self.scene:addObject(o2)
+    self:destroy()
+
   elseif orientation == 'vertical' then
-    local d1, d2 = self.data:cut(orientation, p)
-    local o1 = ChocolateObject(self.x - 4, self.y, d1)
-    local o2 = ChocolateObject(self.x + p*size + 4, self.y, d2)
-    return o1, o2
+    local o1 = ChocolateObject(self.x - 4, self.y, d1, self.state)
+    local o2 = ChocolateObject(self.x + p*size + 4, self.y, d2, self.state)
+    self.scene:addObject(o1)
+    self.scene:addObject(o2)
+    self:destroy()
   end
 end
 
@@ -52,10 +69,7 @@ function ChocolateObject:update(dt)
   if input:isReleased('mouse1') then
     local cutO, cutI = self:findCutline()
     if cutO then
-      local o1, o2 = self:cut(cutO, cutI)
-      self.scene:addObject(o1)
-      self.scene:addObject(o2)
-      self:destroy()
+      self.state:cut(self.data, cutO, cutI)
     end
   end
 end
