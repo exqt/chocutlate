@@ -4,6 +4,7 @@ local Object = require 'object'
 local RectObject = Class('RectObject', Object)
 
 function RectObject:initialize(x, y, w, h)
+  Object.initialize(self)
   self.x, self.y = x, y
   self.w, self.h = w, h
 end

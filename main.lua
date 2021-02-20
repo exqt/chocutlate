@@ -4,8 +4,9 @@ local Scene = require 'scene'
 local Camera = require 'camera'
 scene = Scene()
 local RectObject = require 'rect-object'
-local Chocolate = require 'chocolate'
-local chocolate = Chocolate(0, 0, 6, 9, os.time())
+local ChocolateObject = require 'chocolate-object'
+local ChocolateData = require 'chocolate-data'
+local chocolate = ChocolateObject(0, 0, ChocolateData())
 scene:addObject(chocolate)
 scene.camera:setPosition(chocolate:getCenterPosition())
 
