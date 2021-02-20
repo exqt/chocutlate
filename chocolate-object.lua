@@ -11,6 +11,10 @@ local piecesQuads = {
   love.graphics.newQuad(2*size, 0, size, size, image:getDimensions()),
 }
 
+ChocolateObject.static.drawSinglePiece = function(t, x, y)
+  love.graphics.draw(image, piecesQuads[t], x, y)
+end
+
 function ChocolateObject:initialize(x, y, chocolateData, state)
   self.data = chocolateData ---@type ChocolateData
   self.r, self.c = chocolateData:getDimensions()

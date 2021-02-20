@@ -9,7 +9,7 @@ function ChocolateData:initialize(pieces, pr, pc, qr, qc)
   else
     self.pieces = {}
     self.pr, self.pc = 1, 1
-    self.qr, self.qc = 6, 9
+    self.qr, self.qc = 4, 6
     local r, c = self:getDimensions()
 
     assert(r*c % 6 == 0)

@@ -42,12 +42,14 @@ function Camera:clear(r, g, b, a)
   end)
 end
 
-function Camera:render(fn)
+function Camera:render(fn, ui)
   local g = love.graphics
   g.push()
-  g.origin()
-  g.translate(self.width/2, self.height/2)
-  g.translate(-self.x, -self.y)
+  if not ui then
+    g.origin()
+    g.translate(self.width/2, self.height/2)
+    g.translate(-self.x, -self.y)
+  end
   self.screen:renderTo(fn)
   g.pop()
 end

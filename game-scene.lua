@@ -28,9 +28,30 @@ function GameScene:draw()
       local obj = self.objects[i]
       obj:draw()
     end
-    g.print(("%s %d, %d, %d"):format(self.state.turn == 1 and "@" or ".", self.state.collected[1][1], self.state.collected[1][2], self.state.collected[1][3]), 0, -18)
-    g.print(("%s %d, %d, %d"):format(self.state.turn == 2 and "@" or ".", self.state.collected[2][1], self.state.collected[2][2], self.state.collected[2][3]), 0, 100)
   end)
+  --ui
+  self.camera:render(function()
+    local sw, sh = self.camera.width, self.camera.height
+    local width = 48
+    g.setColor(0, 0, 0)
+    g.rectangle("fill", 0, 0, width, sh)
+    g.rectangle("fill", sw-width, 0, width, sh)
+    g.setColor(1, 1, 1)
+
+    local drawStat = function(player, x, y)
+      g.print(self.state.turn == player and "@" or ".", x, 0)
+      g.print(self.state.collected[player][1], x, 18)
+      ChocolateObject.drawSinglePiece(1, x+16, 18)
+      g.print(self.state.collected[player][2], x, 18*2)
+      ChocolateObject.drawSinglePiece(2, x+16, 18*2)
+      g.print(self.state.collected[player][3], x, 18*3)
+      ChocolateObject.drawSinglePiece(3, x+16, 18*3)
+    end
+
+    drawStat(1, 4)
+    drawStat(2, sw-44)
+  end, true)
+
   self.camera:draw()
 end
 
