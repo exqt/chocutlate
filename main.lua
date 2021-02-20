@@ -6,7 +6,7 @@ scene = Scene()
 local RectObject = require 'rect-object'
 local Chocolate = require 'chocolate'
 local chocolate = Chocolate(0, 0, 6, 9, os.time())
-scene:addObjecct(chocolate)
+scene:addObject(chocolate)
 scene.camera:setPosition(chocolate:getCenterPosition())
 
 function love.load(args)

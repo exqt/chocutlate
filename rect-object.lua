@@ -16,6 +16,10 @@ function RectObject:getDimensions()
   return self.w, self.h
 end
 
+function RectObject:isPointInside(x, y)
+  return self.x <= x and x < self.x+self.w and self.y <= y and y < self.y+self.h
+end
+
 function RectObject:update(dt)
 
 end

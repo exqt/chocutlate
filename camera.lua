@@ -23,13 +23,13 @@ function Camera:moveBy(dx, dy)
 end
 
 function Camera:convertScreenToScene(x, y)
-  return (x - self.width /2) + self.x,
-         (y - self.height/2) + self.y
+  return (x/self.scale - self.width /2) + self.x,
+         (y/self.scale - self.height/2) + self.y
 end
 
 function Camera:convertSceneToScreen(x, y)
-  return ((x - self.x) + self.width/2),
-         ((y - self.y) + self.height/2)
+  return self.scale*((x - self.x) + self.width/2),
+         self.scale*((y - self.y) + self.height/2)
 end
 
 function Camera:update(dt)

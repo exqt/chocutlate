@@ -8,9 +8,14 @@ function Scene:initialize()
   self.objects = {} ---@type GameObject[]
 end
 
-function Scene:addObjecct(obj)
+function Scene:addObject(obj)
   obj.scene = self
   table.insert(self.objects, obj)
+end
+
+function Scene:getMousePosition()
+  local x, y = love.mouse.getPosition()
+  return self.camera:convertScreenToScene(x, y)
 end
 
 function Scene:update(dt)

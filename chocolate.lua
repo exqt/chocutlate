@@ -37,6 +37,10 @@ function Chocolate:initialize(x, y, r, c, seed)
   end
 end
 
+function Chocolate:split(orientation, p)
+
+end
+
 function Chocolate:update(dt)
 
 end
