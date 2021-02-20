@@ -20,6 +20,7 @@ end
 
 function ChocolateObject:findCutline()
   local mx, my = self.scene:getMousePosition()
+  if not self:isPointInside(mx, my) then return end
   local lx, ly = mx - self.x, my - self.y
   for i=1, self.r-1 do
     if math.abs(i*size - ly) <= 3 then
@@ -33,16 +34,30 @@ function ChocolateObject:findCutline()
   end
 end
 
-function ChocolateObject:split(orientation, p)
+function ChocolateObject:cut(orientation, p)
   if orientation == 'horizonal' then
-
+    local d1, d2 = self.data:cut(orientation, p)
+    local o1 = ChocolateObject(self.x, self.y - 4, d1)
+    local o2 = ChocolateObject(self.x, self.y + p*size + 4, d2)
+    return o1, o2
   elseif orientation == 'vertical' then
-
+    local d1, d2 = self.data:cut(orientation, p)
+    local o1 = ChocolateObject(self.x - 4, self.y, d1)
+    local o2 = ChocolateObject(self.x + p*size + 4, self.y, d2)
+    return o1, o2
   end
 end
 
 function ChocolateObject:update(dt)
-
+  if input:isReleased('mouse1') then
+    local cutO, cutI = self:findCutline()
+    if cutO then
+      local o1, o2 = self:cut(cutO, cutI)
+      self.scene:addObject(o1)
+      self.scene:addObject(o2)
+      self:destroy()
+    end
+  end
 end
 
 function ChocolateObject:draw()
@@ -51,8 +66,8 @@ function ChocolateObject:draw()
   for i=1, self.r do
     for j=1, self.c do
       local q = piecesQuads[self.data:get(i, j)]
-      local x = (j-1)*size
-      local y = (i-1)*size
+      local x = self.x + (j-1)*size
+      local y = self.y + (i-1)*size
       g.draw(image, q, x, y)
     end
   end

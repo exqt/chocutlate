@@ -22,6 +22,7 @@ function Scene:update(dt)
   for i, obj in ipairs(self.objects) do
     obj:update(dt)
   end
+  table.filterInplace(self.objects, function(o) return not o._dead end)
 end
 
 function Scene:draw()
@@ -31,6 +32,7 @@ function Scene:draw()
       local obj = self.objects[i]
       obj:draw()
     end
+    love.graphics.circle("fill", 0, 0, 8)
   end)
   self.camera:draw()
 end
