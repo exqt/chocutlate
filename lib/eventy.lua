@@ -16,29 +16,48 @@ Event.__index = Event
 function Event.new()
   local t = setmetatable({}, Event)
   t.list = {}
+  t.removed = {}
   return t
 end
 
 function Event:add(a, b)
   local tag = EventTag.new()
   if type(a) == 'table' then
-    self.list[tag] = {a, b}
+    table.insert(self.list, {tag = tag, obj = a, fn = b})
   else
-    self.list[tag] = a
+    table.insert(self.list, {tag = tag, fn = a})
   end
   return tag
 end
 
 function Event:remove(tag)
-  self.list[tag] = nil
+  self.removed[tag] = true
 end
 
 function Event:invoke(...)
-  for tag, f in pairs(self.list) do
-    if type(f) == 'table' then f[2](f[1], ...)
-    else f(...)
+  local list = {}
+  for i=1, #self.list do
+    local act = self.list[i]
+    if not self.removed[act.tag] then
+      if act.obj then act.fn(act.obj, ...)
+      else act.fn(...)
+      end
     end
   end
+
+  local filterInplace = function(t, fn)
+    local i = 1
+    local j = 1
+    while i <= #t do
+      t[j] = t[i]
+      if fn(t[i]) then j = j + 1 end
+      i = i + 1
+    end
+    while j <= #t do t[#t] = nil end
+  end
+
+  filterInplace(self.list, function(item) return not self.removed[item.tag] end)
+  self.removed = {}
 end
 
 function Event:__call(...) self:invoke(...) end
