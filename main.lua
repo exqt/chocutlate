@@ -3,9 +3,10 @@ require 'global'
 local font = assets.fonts.fixedsys(16)
 love.graphics.setFont(font)
 
+local SelectScene = require 'select-scene'
 local GameScene = require 'game-scene'
 local Camera = require 'camera'
-scene = GameScene()
+scene = SelectScene()
 
 function love.load(args)
   for k, v in ipairs(args) do

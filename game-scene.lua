@@ -7,7 +7,7 @@ local AI = require 'ai'
 ---@class GameScene : Scene
 local GameScene = Class('Scene', Scene)
 
-function GameScene:initialize()
+function GameScene:initialize(mode)
   Scene.initialize(self)
 
   self.state = GameState()
@@ -36,7 +36,6 @@ end
 function GameScene:update(dt)
   Scene.update(self, dt)
   if input:isPressed('mouse2') then
-    print("!")
     local score, action = AI(self.state, 4)
     local idx, orientation, p = unpack(action)
     print(score, idx, orientation)

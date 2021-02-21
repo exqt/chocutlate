@@ -5,7 +5,7 @@ local Timer = require 'lib.timer'
 local Scene = Class('Scene')
 
 function Scene:initialize()
-  self.camera = Camera(self, 16*8, 9*8, 16 * 16, 9 * 16, 4)
+  self.camera = Camera(self, 0, 0, 16 * 16, 9 * 16, 4)
   self.objects = {} ---@type GameObject[]
   self.timer = Timer()
   self.time = 0
