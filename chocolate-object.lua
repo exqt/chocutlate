@@ -52,6 +52,8 @@ end
 
 function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
   if self.data ~= chocolateData then return end
+  local sound = assets.sounds.cut
+  sound:play()
 
   if orientation == 'horizonal' then
     local o1 = ChocolateObject(self.x, self.y - 4, d1, self.state)
