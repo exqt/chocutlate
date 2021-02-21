@@ -1,4 +1,4 @@
-local ChocolateData = require 'chocolate-data'
+local ChocolateData = require 'src.core.chocolate-data'
 
 ---@class GameState
 local GameState = Class('GameState')

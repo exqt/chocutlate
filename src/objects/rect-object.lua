@@ -1,4 +1,4 @@
-local Object = require 'object'
+local Object = require 'src.objects.object'
 
 ---@class RectObject : GameObject
 local RectObject = Class('RectObject', Object)

@@ -1,4 +1,4 @@
-local Super = require 'rect-object'
+local Super = require 'src.objects.rect-object'
 
 ---@class ChocolateObject : RectObject
 local ChocolateObject = Class('Chocolate', Super)

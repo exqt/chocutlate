@@ -1,4 +1,4 @@
-local Camera = require 'camera'
+local Camera = require 'src.camera'
 local Timer = require 'lib.timer'
 
 ---@class Scene

@@ -1,4 +1,4 @@
-local RectObject = require 'rect-object'
+local RectObject = require 'src.objects.rect-object'
 
 ---@class Button : RectObject
 local Button = Class('Button', RectObject)

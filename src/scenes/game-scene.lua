@@ -1,8 +1,8 @@
-local Scene = require 'scene'
-local ChocolateObject = require 'chocolate-object'
-local ChocolateData = require 'chocolate-data'
-local GameState = require 'game-state'
-local AI = require 'ai'
+local Scene = require 'src.scenes.scene'
+local ChocolateObject = require 'src.objects.chocolate-object'
+local ChocolateData = require 'src.core.chocolate-data'
+local GameState = require 'src.core.game-state'
+local AI = require 'src.core.ai'
 
 ---@class GameScene : Scene
 local GameScene = Class('Scene', Scene)

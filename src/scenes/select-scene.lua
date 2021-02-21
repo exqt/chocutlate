@@ -1,4 +1,4 @@
-local Scene = require 'scene'
+local Scene = require 'src.scenes.scene'
 
 ---@class SelectScene : Scene
 local SelectScene = Class('Scene', Scene)
@@ -10,8 +10,8 @@ function SelectScene:initialize()
   self.bg:setWrap("repeat", "repeat")
   self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
 
-  local Button = require 'button'
-  local GameScene = require 'game-scene'
+  local Button = require 'src.objects.button'
+  local GameScene = require 'src.scenes.game-scene'
   local buttonBot = Button(0, 0, "VS Bot")
   local button2P = Button(0, 20, "2 Player")
   self:addObject(buttonBot)
