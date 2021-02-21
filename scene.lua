@@ -1,4 +1,5 @@
 local Camera = require 'camera'
+local Timer = require 'lib.timer'
 
 ---@class Scene
 local Scene = Class('Scene')
@@ -6,6 +7,7 @@ local Scene = Class('Scene')
 function Scene:initialize()
   self.camera = Camera(self, 16*8, 9*8, 16 * 16, 9 * 16, 4)
   self.objects = {} ---@type GameObject[]
+  self.timer = Timer()
 end
 
 function Scene:addObject(obj)
@@ -19,6 +21,7 @@ function Scene:getMousePosition()
 end
 
 function Scene:update(dt)
+  self.timer:update(dt)
   for i, obj in ipairs(self.objects) do
     obj:update(dt)
   end

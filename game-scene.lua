@@ -2,6 +2,7 @@ local Scene = require 'scene'
 local ChocolateObject = require 'chocolate-object'
 local ChocolateData = require 'chocolate-data'
 local GameState = require 'game-state'
+local AI = require 'ai'
 
 ---@class GameScene : Scene
 local GameScene = Class('Scene', Scene)
@@ -10,13 +11,33 @@ function GameScene:initialize()
   Scene.initialize(self)
 
   self.state = GameState()
-  local chocolateObject = ChocolateObject(0, 0, self.state:enumerate()(), self.state)
+  local chocolateObject = ChocolateObject(0, 0, self.state.chocolates[1], self.state)
   self:addObject(chocolateObject)
+
   self.camera:setPosition(chocolateObject:getCenterPosition())
+
+  self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
+    self.timer:after(0.5, function()
+      if self.state:getWinner() then return end
+      if self.state.turn == 2 then
+        local score, action = AI(self.state, 4)
+        local idx, orientation, p = unpack(action)
+        print(score, idx, orientation)
+        self.state:cut(self.state.chocolates[idx], orientation, p)
+      end
+    end)
+  end)
 end
 
 function GameScene:update(dt)
   Scene.update(self, dt)
+  if input:isPressed('mouse2') then
+    print("!")
+    local score, action = AI(self.state, 4)
+    local idx, orientation, p = unpack(action)
+    print(score, idx, orientation)
+    self.state:cut(self.state.chocolates[idx], orientation, p)
+  end
 end
 
 function GameScene:draw()
@@ -50,6 +71,10 @@ function GameScene:draw()
 
     drawStat(1, 4)
     drawStat(2, sw-44)
+    local winner = self.state:getWinner()
+    if winner then
+      g.print(winner, 16, 16)
+    end
   end, true)
 
   self.camera:draw()

@@ -9,7 +9,7 @@ function ChocolateData:initialize(pieces, pr, pc, qr, qc)
   else
     self.pieces = {}
     self.pr, self.pc = 1, 1
-    self.qr, self.qc = 4, 6
+    self.qr, self.qc = 5, 6
     local r, c = self:getDimensions()
 
     assert(r*c % 6 == 0)
@@ -20,8 +20,8 @@ function ChocolateData:initialize(pieces, pr, pc, qr, qc)
     end
 
     math.randomseed(os.clock())
-    for i=1, #pool do
-      local j = math.random(1, #pool)
+    for i=2, #pool do
+      local j = math.random(1, i)
       pool[i], pool[j] = pool[j], pool[i]
     end
 
@@ -33,6 +33,10 @@ function ChocolateData:initialize(pieces, pr, pc, qr, qc)
       table.insert(self.pieces, row)
     end
   end
+end
+
+function ChocolateData:clone()
+  return ChocolateData(self.pieces, self.pr, self.pc, self.qr, self.qc)
 end
 
 function ChocolateData:__tostring()
