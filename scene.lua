@@ -8,6 +8,7 @@ function Scene:initialize()
   self.camera = Camera(self, 16*8, 9*8, 16 * 16, 9 * 16, 4)
   self.objects = {} ---@type GameObject[]
   self.timer = Timer()
+  self.time = 0
 end
 
 function Scene:addObject(obj)
@@ -21,6 +22,7 @@ function Scene:getMousePosition()
 end
 
 function Scene:update(dt)
+  self.time = self.time + dt
   self.timer:update(dt)
   for i, obj in ipairs(self.objects) do
     obj:update(dt)

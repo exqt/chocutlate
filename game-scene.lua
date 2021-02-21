@@ -16,6 +16,10 @@ function GameScene:initialize()
 
   self.camera:setPosition(chocolateObject:getCenterPosition())
 
+  self.bg = assets.images.bg ---@type Image
+  self.bg:setWrap("repeat", "repeat")
+  self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
+
   self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
     self.timer:after(0.5, function()
       if self.state:getWinner() then return end
@@ -45,6 +49,8 @@ function GameScene:draw()
 
   self.camera:clear(0.2, 0.2, 0.2)
   self.camera:render(function()
+    self.bgQuad:setViewport(10*self.time, 10*self.time, 512, 512)
+    g.draw(self.bg, self.bgQuad, -256, -256)
     for i=#self.objects, 1, -1 do
       local obj = self.objects[i]
       obj:draw()
