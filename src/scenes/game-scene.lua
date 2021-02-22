@@ -83,6 +83,7 @@ function GameScene:draw()
   end, true)
 
   self.camera:draw()
+  self:drawTransition()
 end
 
 return GameScene

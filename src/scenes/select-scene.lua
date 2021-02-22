@@ -17,10 +17,16 @@ function SelectScene:initialize()
   self:addObject(buttonBot)
   self:addObject(button2P)
   buttonBot.onClick:add(function()
-    scene = GameScene()
+    self:doTransition('out', function()
+      scene = GameScene()
+      scene:doTransition('in')
+    end)
   end)
   button2P.onClick:add(function()
-    scene = GameScene()
+    self:doTransition('out', function()
+      scene = GameScene()
+      scene:doTransition('in')
+    end)
   end)
 end
 
@@ -47,6 +53,7 @@ function SelectScene:draw()
   end, true)
 
   self.camera:draw()
+  self:drawTransition()
 end
 
 return SelectScene
