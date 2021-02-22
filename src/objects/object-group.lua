@@ -9,7 +9,7 @@ function GameObjectGroup:initialize()
 end
 
 function GameObjectGroup:add(o)
-  o.group = self
+  o.parent = self
   table.insert(self.list, o)
 end
 

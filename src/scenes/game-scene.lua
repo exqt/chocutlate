@@ -15,7 +15,7 @@ function GameScene:initialize(mode)
   self.chocolateObjects = ObjectGroup()
   local co = ChocolateObject(0, 0, self.state.chocolates[1], self.state)
   self.chocolateObjects:add(co)
-  self.objects:add(co)
+  self.objects:add(self.chocolateObjects)
 
   self.camera:setPosition(co:getCenterPosition())
 
@@ -38,7 +38,7 @@ end
 
 function GameScene:reset()
   self:doTransition('out', function()
-    scene = GameScene()
+    scene = GameScene(self.mode)
     scene:doTransition('in')
   end)
 end
@@ -57,7 +57,7 @@ function GameScene:update(dt)
   if self.ai then
     if self.ai:getCount() == 1 then
       local idx, orientation, p = unpack(self.ai:getResult())
-      local sleepTime = math.max(0.5 - (self.time - self.aiRequestedTime), 0)
+      local sleepTime = math.max(1.0 - (self.time - self.aiRequestedTime), 0)
       self.timer:after(sleepTime, function()
         self.state:cut(self.state.chocolates[idx], orientation, p)
       end)

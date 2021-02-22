@@ -24,7 +24,21 @@ function ChocolateObject:initialize(x, y, chocolateData, state)
   self.time = 0
 
   if self.data:isCollectable() then
-    self:destroy()
+    self.nonSelectable = true
+    scene.timer:after(math.random()*0.2+0.3, function()
+      local sounds = {assets.sounds.crunch1, assets.sounds.crunch2, assets.sounds.crunch3}
+      local n = math.random(1, 3)
+      if sounds[n]:isPlaying() then n = (n % 3) + 1 end
+      sounds[n]:play()
+
+      local Crumbs = require 'src.objects.crumbs'
+      local r, c = self.data:getDimensions()
+      for i=1, r do for j=1, c do
+        self.parent.parent:add(Crumbs(self.x + (j-1)*size, self.y + (i-1)*size, self.data:get(i, j)))
+      end end
+
+      self:destroy()
+    end)
     return
   end
 
@@ -61,24 +75,24 @@ function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
   if orientation == 'horizonal' then
     local o1 = ChocolateObject(self.x, self.y - 2, d1, self.state)
     local o2 = ChocolateObject(self.x, self.y + p*size + 2, d2, self.state)
-    self.group:add(o1)
-    self.group:add(o2)
+    self.parent:add(o1)
+    self.parent:add(o2)
     self:destroy()
 
   elseif orientation == 'vertical' then
     local o1 = ChocolateObject(self.x - 2, self.y, d1, self.state)
     local o2 = ChocolateObject(self.x + p*size + 2, self.y, d2, self.state)
-    self.group:add(o1)
-    self.group:add(o2)
+    self.parent:add(o1)
+    self.parent:add(o2)
     self:destroy()
   end
 end
 
 function ChocolateObject:update(dt)
   self.time = self.time + dt
-  if self.time < 0.3 then return end
+  if self.time < 0.3 or self.nonSelectable then return end
 
-  for o in self.group:enumerate() do
+  for o in self.parent:enumerate() do
     local _, dx, dy = self:overlaps(o)
     if -2 <= dx and dy >= 1 then
       local a, b = self, o
@@ -116,6 +130,8 @@ function ChocolateObject:draw()
       g.draw(image, q, x, y)
     end
   end
+
+  if self.nonSelectable then return end
 
   local cutOrientation, cutIdx = self:findCutline()
   g.setColor(1, 1, 0)
