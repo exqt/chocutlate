@@ -6,7 +6,6 @@ love.graphics.setFont(font)
 local SelectScene = require 'src.scenes.select-scene'
 local GameScene = require 'src.scenes.game-scene'
 local Camera = require 'src.camera'
-scene = SelectScene()
 
 function love.load(args)
   for k, v in ipairs(args) do
@@ -14,6 +13,8 @@ function love.load(args)
       DEBUG = true
     end
   end
+
+  scene = DEBUG and GameScene('2p') or SelectScene()
 end
 
 function love.mousepressed(x, y, btn) input:mousepressed(x, y, btn) end
