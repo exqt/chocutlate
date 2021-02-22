@@ -14,6 +14,11 @@ function GameStat:initialize(x, y, state, player)
   self.x, self.y = x, y
   self.state = state
   self.player = player
+
+  self.offsetX = player == 1 and -GameStat.width or GameStat.width
+  scene.onStart:add(function()
+    scene.timer:tween(0.4, self, {offsetX = 0}, 'linear')
+  end)
 end
 
 function GameStat:update(dt)
@@ -23,7 +28,7 @@ function GameStat:draw()
   local g = love.graphics
   local h = scene.camera.height
   g.push()
-  g.translate(self.x, self.y)
+  g.translate(self.x + self.offsetX, self.y)
     g.setColor(0, 0, 0)
     g.rectangle("fill", 0, 0, GameStat.width, h)
     g.setColor(1, 1, 1)

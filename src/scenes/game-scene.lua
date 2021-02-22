@@ -11,6 +11,10 @@ local GameScene = Class('Scene', Scene)
 function GameScene:initialize(mode)
   Scene.initialize(self)
 
+  self.onStart = Event()
+  self.started = false
+  self.ended = false
+
   self.state = GameState()
   self.chocolateObjects = ObjectGroup()
   local co = ChocolateObject(0, 0, self.state.chocolates[1], self.state)
@@ -22,6 +26,9 @@ function GameScene:initialize(mode)
   self.bg = assets.images.bg ---@type Image
   self.bg:setWrap("repeat", "repeat")
   self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
+
+  local cx, cy = self.camera.x, self.camera.y
+  local cw, ch = self.camera.width, self.camera.height
 
   self.mode = mode
   if self.mode == '2p' then
@@ -42,15 +49,46 @@ function GameScene:initialize(mode)
   end)
 
   local GameStat = require 'src.objects.stat'
-  local GameObjectGroup = require 'src.objects.object-group'
-  local cx, cy = self.camera.x, self.camera.y
-  local cw, ch = self.camera.width, self.camera.height
   local stat1 = GameStat(cx - cw/2, cy - ch/2, self.state, 1)
   local stat2 = GameStat(cx + cw/2 - GameStat.width, cy - ch/2, self.state, 2)
 
-  self.stats = GameObjectGroup()
+  self.stats = ObjectGroup()
   self.stats:add(stat1)
   self.stats:add(stat2)
+
+  if self.mode == 'bot' then
+    self.playerSelectButtons = ObjectGroup()
+    local Text = require 'src.objects.text'
+    local p1 = Text(cx - 28, 88, "1P", true)
+    local p2 = Text(cx + 12, 88, "2P", true)
+    p1.onClick:add(function()
+      self.aiPlayer = 2
+      self.started = true
+      self.onStart()
+      self.playerSelectButtons.active = false
+    end)
+    p2.onClick:add(function()
+      self.aiPlayer = 1
+      self.started = true
+      self.onStart()
+      self.timer:after(0.3, function() self:requestAIMove() end)
+      self.playerSelectButtons.active = false
+    end)
+    self.playerSelectButtons:add(p1)
+    self.playerSelectButtons:add(p2)
+    self.objects:add(self.playerSelectButtons)
+  else
+    self.timer:after(1.0, function()
+      self.started = true
+      self.onStart()
+    end)
+  end
+
+  self.state.onCut:add(function()
+    self.timer:after(0.1, function()
+      if self.state:getWinner() then self:onEnded() end
+    end)
+  end)
 end
 
 function GameScene:reset()
@@ -69,6 +107,7 @@ function GameScene:requestAIMove()
 end
 
 function GameScene:onEnded()
+  self.ended = true
   local text = "?"
   local winner = self.state:getWinner()
   if self.mode == 'bot' then
@@ -78,7 +117,7 @@ function GameScene:onEnded()
       text = "YOU WIN!"
     end
   elseif self.mode == '2p' then
-    text = tostring(winner) .. " WIN!"
+    text = tostring(winner) .. "P WIN!"
   end
 
   local TextObject = require 'src.objects.text'

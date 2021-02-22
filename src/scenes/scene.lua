@@ -11,6 +11,7 @@ function Scene:initialize()
   self.timer = Timer()
   self.time = 0
   self.transition = nil
+  scene = self
 end
 
 function Scene:doTransition(inout, fn)

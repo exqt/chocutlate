@@ -90,7 +90,7 @@ end
 
 function ChocolateObject:update(dt)
   self.time = self.time + dt
-  if self.time < 0.3 or self.nonSelectable then return end
+  if self.time < 0.3 or self.nonSelectable or not scene.started or scene.ended then return end
 
   for o in self.parent:enumerate() do
     if o.class ~= ChocolateObject then goto next end
