@@ -6,7 +6,7 @@ local ObjectGroup = require 'src.objects.object-group'
 local Scene = Class('Scene')
 
 function Scene:initialize()
-  self.camera = Camera(self, 0, 0, 16 * 16, 9 * 16, 4)
+  self.camera = Camera(self, 0, 0, 16 * 16, 9 * 16, 3)
   self.objects = ObjectGroup()
   self.timer = Timer()
   self.time = 0
