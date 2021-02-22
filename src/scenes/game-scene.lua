@@ -2,6 +2,7 @@ local Scene = require 'src.scenes.scene'
 local ChocolateObject = require 'src.objects.chocolate-object'
 local ChocolateData = require 'src.core.chocolate-data'
 local GameState = require 'src.core.game-state'
+local ObjectGroup = require 'src.objects.object-group'
 local AI = require 'src.core.ai'
 
 ---@class GameScene : Scene
@@ -11,10 +12,12 @@ function GameScene:initialize(mode)
   Scene.initialize(self)
 
   self.state = GameState()
-  local chocolateObject = ChocolateObject(0, 0, self.state.chocolates[1], self.state)
-  self:addObject(chocolateObject)
+  self.chocolateObjects = ObjectGroup()
+  local co = ChocolateObject(0, 0, self.state.chocolates[1], self.state)
+  self.chocolateObjects:add(co)
+  self.objects:add(co)
 
-  self.camera:setPosition(chocolateObject:getCenterPosition())
+  self.camera:setPosition(co:getCenterPosition())
 
   self.bg = assets.images.bg ---@type Image
   self.bg:setWrap("repeat", "repeat")
@@ -67,10 +70,7 @@ function GameScene:draw()
     local drawObjects = function(x, y)
       g.push()
       g.translate(x, y)
-      for i=#self.objects, 1, -1 do
-        local obj = self.objects[i]
-        obj:draw()
-      end
+      self.objects:draw()
       g.pop()
     end
     g.setShader(assets.shaders.shadow)

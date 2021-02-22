@@ -1,5 +1,6 @@
 ---@class GameObject
 ---@field scene Scene
+---@field group GameObjectGroup
 ---@field _dead boolean
 local GameObject = Class('GameObject')
 

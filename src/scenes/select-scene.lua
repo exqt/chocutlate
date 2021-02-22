@@ -16,8 +16,8 @@ function SelectScene:initialize()
 
   local buttonBot = Button(0, 0, "VS Bot")
   local button2P = Button(0, 0, "2 Players")
-  self:addObject(buttonBot)
-  self:addObject(button2P)
+  self.objects:add(buttonBot)
+  self.objects:add(button2P)
   buttonBot:setCenterPosition(0, 0)
   buttonBot.onClick:add(function()
     self:doTransition('out', function()
@@ -33,7 +33,7 @@ function SelectScene:initialize()
     end)
   end)
   local logo = Image(0, 0, assets.images.logo)
-  self:addObject(logo)
+  self.objects:add(logo)
   logo:setCenterPosition(0, -32)
 end
 
@@ -51,10 +51,7 @@ function SelectScene:draw()
     local drawObjects = function(x, y)
       g.push()
       g.translate(x, y)
-      for i=#self.objects, 1, -1 do
-        local obj = self.objects[i]
-        obj:draw()
-      end
+      self.objects:draw()
       g.pop()
     end
     g.setShader(assets.shaders.shadow)

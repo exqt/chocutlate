@@ -35,7 +35,7 @@ function ChocolateObject:destroy()
 end
 
 function ChocolateObject:findCutline()
-  local mx, my = self.scene:getMousePosition()
+  local mx, my = scene:getMousePosition()
   if not self:isPointInside(mx, my) then return end
   local lx, ly = mx - self.x, my - self.y
   for i=1, self.r-1 do
@@ -58,15 +58,15 @@ function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
   if orientation == 'horizonal' then
     local o1 = ChocolateObject(self.x, self.y - 4, d1, self.state)
     local o2 = ChocolateObject(self.x, self.y + p*size + 4, d2, self.state)
-    self.scene:addObject(o1)
-    self.scene:addObject(o2)
+    self.group:add(o1)
+    self.group:add(o2)
     self:destroy()
 
   elseif orientation == 'vertical' then
     local o1 = ChocolateObject(self.x - 4, self.y, d1, self.state)
     local o2 = ChocolateObject(self.x + p*size + 4, self.y, d2, self.state)
-    self.scene:addObject(o1)
-    self.scene:addObject(o2)
+    self.group:add(o1)
+    self.group:add(o2)
     self:destroy()
   end
 end

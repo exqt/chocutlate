@@ -1,20 +1,16 @@
 local Camera = require 'src.camera'
 local Timer = require 'lib.timer'
+local ObjectGroup = require 'src.objects.object-group'
 
 ---@class Scene
 local Scene = Class('Scene')
 
 function Scene:initialize()
   self.camera = Camera(self, 0, 0, 16 * 16, 9 * 16, 4)
-  self.objects = {} ---@type GameObject[]
+  self.objects = ObjectGroup()
   self.timer = Timer()
   self.time = 0
   self.transition = nil
-end
-
-function Scene:addObject(obj)
-  obj.scene = self
-  table.insert(self.objects, obj)
 end
 
 function Scene:doTransition(inout, fn)
@@ -40,10 +36,7 @@ function Scene:update(dt)
   self.timer:update(dt)
   if self.transition then return end
   self.time = self.time + dt
-  for i, obj in ipairs(self.objects) do
-    obj:update(dt)
-  end
-  table.filterInplace(self.objects, function(o) return not o._dead end)
+  self.objects:update(dt)
 end
 
 function Scene:drawTransition()

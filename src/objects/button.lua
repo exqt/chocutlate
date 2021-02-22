@@ -15,7 +15,7 @@ function Button:initialize(x, y, text)
 end
 
 function Button:update(dt)
-  if self:isPointInside(self.scene:getMousePosition()) then
+  if self:isPointInside(scene:getMousePosition()) then
     self.hover = true
     if input:isPressed('mouse1') then
       self.onClick()
