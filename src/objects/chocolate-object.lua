@@ -20,9 +20,6 @@ function ChocolateObject:initialize(x, y, chocolateData, state)
   self.r, self.c = chocolateData:getDimensions()
   Super.initialize(self, x, y, self.c*size, self.r*size)
 
-  self.vx, self.vy = 0, 0
-  self.time = 0
-
   if self.data:isCollectable() then
     self.nonSelectable = true
     scene.timer:after(math.random()*0.2+0.3, function()
@@ -68,6 +65,9 @@ function ChocolateObject:findCutline()
 end
 
 function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
+  self.nonSelectable = true
+  scene.timer:after(0.5, function() self.nonSelectable = false end)
+
   if self.data ~= chocolateData then return end
   local sound = assets.sounds.cut
   sound:play()
@@ -89,8 +89,7 @@ function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
 end
 
 function ChocolateObject:update(dt)
-  self.time = self.time + dt
-  if self.time < 0.3 or self.nonSelectable or not scene.started or scene.ended then return end
+  if self.nonSelectable or not scene.started or scene.ended then return end
 
   for o in self.parent:enumerate() do
     if o.class ~= ChocolateObject then goto next end

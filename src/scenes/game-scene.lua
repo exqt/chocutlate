@@ -124,6 +124,13 @@ function GameScene:onEnded()
   local winText = TextObject(0, 0, text)
   winText:setCenterPosition(self.camera.x, -20)
   self.objects:add(winText)
+
+  local retryText = TextObject(0, 0, "Retry", true)
+  retryText:setCenterPosition(self.camera.x, self.camera.y + 56)
+  retryText.onClick:add(function()
+    self:reset()
+  end)
+  self.objects:add(retryText)
 end
 
 function GameScene:update(dt)
@@ -162,7 +169,7 @@ function GameScene:draw()
     end
     self.stats:draw()
     g.setShader(assets.shaders.shadow)
-    drawObjects(2, 2)
+    drawObjects(1, 1)
     g.setShader()
     drawObjects(0, 0)
   end)
