@@ -15,7 +15,7 @@ function SelectScene:initialize()
   local GameScene = require 'src.scenes.game-scene'
 
   local buttonBot = Button(0, 0, "VS Bot")
-  local button2P = Button(0, 0, "2 Player")
+  local button2P = Button(0, 0, "2 Players")
   self:addObject(buttonBot)
   self:addObject(button2P)
   buttonBot:setCenterPosition(0, 0)
