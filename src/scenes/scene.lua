@@ -24,10 +24,10 @@ function Scene:doTransition(inout, fn)
   end
   if inout == 'in' then
     self.transition = {type = 'in', value = 0}
-    self.timer:tween(1, self.transition, {value = 1}, 'in-quad', onEnd)
+    self.timer:tween(1.0, self.transition, {value = 1}, 'linear', onEnd)
   elseif inout == 'out' then
     self.transition = {type = 'out', value = 0}
-    self.timer:tween(1, self.transition, {value = 1}, 'out-quad', onEnd)
+    self.timer:tween(1.0, self.transition, {value = 1}, 'linear', onEnd)
   end
 end
 
@@ -49,12 +49,24 @@ end
 function Scene:drawTransition()
   if not self.transition then return end
   local g = love.graphics
-  local sw, sh = love.graphics.getDimensions()
+  local sw, sh = self.camera.width, self.camera.height
+  local n = 6
+  local l = sh/n/2
   g.setColor(0, 0, 0)
   if self.transition.type == 'in' then
-    g.rectangle("fill", sw*self.transition.value, 0, sw, sh)
+    local x = sw*(self.transition.value*1.1)
+    g.rectangle("fill", x, 0, sw, sh)
+    for i=0, n do
+      local y = 2*i*l-l
+      g.polygon("fill", x, y, x-l, y+l, x, y+2*l)
+    end
   elseif self.transition.type == 'out' then
-    g.rectangle("fill", 0, 0, sw*self.transition.value, sh)
+    local x = sw*(self.transition.value*1.1 - 0.1)
+    g.rectangle("fill", 0, 0, x, sh)
+    for i=0, n do
+      local y = 2*i*l-l
+      g.polygon("fill", x, y, x+l, y+l, x, y+2*l)
+    end
   end
   g.setColor(1, 1, 1)
 end

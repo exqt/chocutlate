@@ -48,12 +48,10 @@ function SelectScene:draw()
   end)
   --ui
   self.camera:render(function()
-    local sw, sh = self.camera.width, self.camera.height
-    local width = 48
+    self:drawTransition()
   end, true)
 
   self.camera:draw()
-  self:drawTransition()
 end
 
 return SelectScene

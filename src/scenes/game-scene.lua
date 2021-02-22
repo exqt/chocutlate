@@ -33,6 +33,13 @@ function GameScene:initialize(mode)
   end)
 end
 
+function GameScene:reset()
+  self:doTransition('out', function()
+    scene = GameScene()
+    scene:doTransition('in')
+  end)
+end
+
 function GameScene:update(dt)
   Scene.update(self, dt)
   if input:isPressed('mouse2') then
@@ -40,6 +47,9 @@ function GameScene:update(dt)
     local idx, orientation, p = unpack(action)
     print(score, idx, orientation)
     self.state:cut(self.state.chocolates[idx], orientation, p)
+  end
+  if input:isPressed('mouse3') then
+    self:reset()
   end
 end
 
@@ -80,10 +90,11 @@ function GameScene:draw()
     if winner then
       g.print(winner, 16, 16)
     end
+
+    self:drawTransition()
   end, true)
 
   self.camera:draw()
-  self:drawTransition()
 end
 
 return GameScene
