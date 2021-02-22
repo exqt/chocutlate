@@ -13,6 +13,10 @@ function RectObject:getCenterPosition()
   return self.x + self.w/2, self.y + self.h/2
 end
 
+function RectObject:setCenterPosition(x, y)
+  self.x, self.y = x - self.w/2, y - self.h/2
+end
+
 function RectObject:getDimensions()
   return self.w, self.h
 end

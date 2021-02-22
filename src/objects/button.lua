@@ -27,8 +27,6 @@ end
 
 function Button:draw()
   local g = love.graphics
-  g.setColor(0, 0, 0)
-  g.print(self.text, self.x+1, self.y+1)
   if self.hover then
     g.setColor(1, 1, 1)
   else
