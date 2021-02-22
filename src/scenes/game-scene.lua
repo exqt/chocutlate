@@ -146,10 +146,15 @@ function GameScene:update(dt)
     end
   end
 
-  if input:isPressed('mouse2') then
+  if input:isPressed('escape') then
+    local SelectScene = require 'src.scenes.select-scene'
+    self:doTransition('out', function()
+      scene = SelectScene()
+      scene:doTransition('in')
+    end)
   end
 
-  if input:isPressed('mouse3') then
+  if input:isPressed('r') then
     self:reset()
   end
 end

@@ -17,6 +17,7 @@ function love.load(args)
   scene = DEBUG and GameScene('bot') or SelectScene()
 end
 
+function love.keypressed(key) input:keypressed(key) end
 function love.mousepressed(x, y, btn) input:mousepressed(x, y, btn) end
 function love.mousereleased(x, y, btn) input:mousereleased(x, y, btn) end
 

@@ -3,6 +3,10 @@ module._pressed = {}
 module._released = {}
 
 --love event
+function module:keypressed(key)
+  self._pressed[key] = true
+end
+
 function module:mousepressed(x, y, btn)
   self._pressed['mouse' .. tostring(btn)] = true
 end
