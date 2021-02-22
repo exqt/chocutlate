@@ -19,7 +19,7 @@ function GameScene:initialize(mode)
   self.bg = assets.images.bg ---@type Image
   self.bg:setWrap("repeat", "repeat")
   self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
-  self.ai = AI(6)
+  self.ai = AI(5)
 
   self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
     self.timer:after(0.3, function()

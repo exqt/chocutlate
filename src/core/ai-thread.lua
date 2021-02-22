@@ -1,5 +1,5 @@
 require 'global'
-local ser = require 'lib.bitser'
+local ser = require 'lib.binser'
 local ChocolateData = require 'src.core.chocolate-data'
 local GameState = require 'src.core.game-state'
 
@@ -73,7 +73,8 @@ local function AlphaBeta(state, depth, alpha, beta)
 end
 
 local bstate, depth = ...
-local state = ser.loads(bstate)
+local results = ser.deserialize(bstate)
+local state = results[1]
 --local score, action = MinMax(state, depth)
 local score, action = AlphaBeta(state, depth, -INF, INF)
 love.thread.getChannel("ai"):push(action)

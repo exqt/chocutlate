@@ -7,8 +7,8 @@ end
 
 function AI:run(state)
   local state = state:clone()
-  local ser = require 'lib.bitser'
-  local b = ser.dumps(state)
+  local ser = require 'lib.binser'
+  local b = ser.serialize(state)
   self.thread:start(b, self.depth)
 end
 
