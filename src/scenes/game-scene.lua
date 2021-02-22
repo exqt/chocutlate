@@ -40,6 +40,17 @@ function GameScene:initialize(mode)
       if self.state:getWinner() then self:onEnded() end
     end)
   end)
+
+  local GameStat = require 'src.objects.stat'
+  local GameObjectGroup = require 'src.objects.object-group'
+  local cx, cy = self.camera.x, self.camera.y
+  local cw, ch = self.camera.width, self.camera.height
+  local stat1 = GameStat(cx - cw/2, cy - ch/2, self.state, 1)
+  local stat2 = GameStat(cx + cw/2 - GameStat.width, cy - ch/2, self.state, 2)
+
+  self.stats = GameObjectGroup()
+  self.stats:add(stat1)
+  self.stats:add(stat2)
 end
 
 function GameScene:reset()
@@ -110,33 +121,14 @@ function GameScene:draw()
       self.objects:draw()
       g.pop()
     end
+    self.stats:draw()
     g.setShader(assets.shaders.shadow)
     drawObjects(2, 2)
     g.setShader()
     drawObjects(0, 0)
   end)
-  --ui
+
   self.camera:render(function()
-    local sw, sh = self.camera.width, self.camera.height
-    local width = 48
-    g.setColor(0, 0, 0)
-    g.rectangle("fill", 0, 0, width, sh)
-    g.rectangle("fill", sw-width, 0, width, sh)
-    g.setColor(1, 1, 1)
-
-    local drawStat = function(player, x, y)
-      g.print(self.state.turn == player and "@" or ".", x, 0)
-      g.print(self.state.collected[player][1], x, 18)
-      ChocolateObject.drawSinglePiece(1, x+16, 18)
-      g.print(self.state.collected[player][2], x, 18*2)
-      ChocolateObject.drawSinglePiece(2, x+16, 18*2)
-      g.print(self.state.collected[player][3], x, 18*3)
-      ChocolateObject.drawSinglePiece(3, x+16, 18*3)
-    end
-
-    drawStat(1, 4)
-    drawStat(2, sw-44)
-
     self:drawTransition()
   end, true)
 
