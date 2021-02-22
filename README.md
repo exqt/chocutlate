@@ -1,5 +1,5 @@
 # Chocutlate
-A dots-and-boxes-like two-player strategy game. Play with a bot or your friend!
+A dots-and-boxes-like two-player strategy game. Play with a bot or your friend! [Play](https://exqt.itch.io/chocutlate)
 
 Made for [LÖVE Jam 2021](https://itch.io/jam/love2d-jam-2021).
 
