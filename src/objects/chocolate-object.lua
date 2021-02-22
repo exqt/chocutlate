@@ -92,24 +92,24 @@ function ChocolateObject:update(dt)
   if self.nonSelectable or not scene.started or scene.ended then return end
 
   for o in self.parent:enumerate() do
-    if o.class ~= ChocolateObject then goto next end
-    local _, dx, dy = self:overlaps(o)
-    if -2 <= dx and dy >= 1 then
-      local a, b = self, o
-      if a.x > b.x then a, b = b, a end
-      a.x = a.x - 4*dt
-      b.x = b.x + 4*dt
-      break
-    end
+    if o.class == ChocolateObject then
+      local _, dx, dy = self:overlaps(o)
+      if -2 <= dx and dy >= 1 then
+        local a, b = self, o
+        if a.x > b.x then a, b = b, a end
+        a.x = a.x - 4*dt
+        b.x = b.x + 4*dt
+        break
+      end
 
-    if -2 <= dy and dx >= 1 then
-      local a, b = self, o
-      if a.y > b.y then a, b = b, a end
-      a.y = a.y - 4*dt
-      b.y = b.y + 4*dt
-      break
+      if -2 <= dy and dx >= 1 then
+        local a, b = self, o
+        if a.y > b.y then a, b = b, a end
+        a.y = a.y - 4*dt
+        b.y = b.y + 4*dt
+        break
+      end
     end
-    ::next::
   end
 
   if input:isReleased('mouse1') then
