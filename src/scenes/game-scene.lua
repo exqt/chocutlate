@@ -25,7 +25,7 @@ function GameScene:initialize(mode)
   self.ai = AI(5)
 
   self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
-    self.timer:after(0.3, function()
+    self.timer:after(0.5, function()
       if self.state:getWinner() then return end
       if self.state.turn == 2 then
         self.ai:run(self.state)

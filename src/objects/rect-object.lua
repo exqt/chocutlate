@@ -25,6 +25,13 @@ function RectObject:isPointInside(x, y)
   return self.x <= x and x < self.x+self.w and self.y <= y and y < self.y+self.h
 end
 
+---@param other RectObject
+function RectObject:overlaps(other)
+  local x = math.min(self.x + self.w, other.x + other.w) - math.max(self.x, other.x)
+  local y = math.min(self.y + self.h, other.y + other.h) - math.max(self.y, other.y)
+  return x > 0 and y > 0, x, y
+end
+
 function RectObject:update(dt)
 
 end

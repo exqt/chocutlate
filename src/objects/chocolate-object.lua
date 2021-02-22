@@ -20,6 +20,9 @@ function ChocolateObject:initialize(x, y, chocolateData, state)
   self.r, self.c = chocolateData:getDimensions()
   Super.initialize(self, x, y, self.c*size, self.r*size)
 
+  self.vx, self.vy = 0, 0
+  self.time = 0
+
   if self.data:isCollectable() then
     self:destroy()
     return
@@ -56,15 +59,15 @@ function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
   sound:play()
 
   if orientation == 'horizonal' then
-    local o1 = ChocolateObject(self.x, self.y - 4, d1, self.state)
-    local o2 = ChocolateObject(self.x, self.y + p*size + 4, d2, self.state)
+    local o1 = ChocolateObject(self.x, self.y - 2, d1, self.state)
+    local o2 = ChocolateObject(self.x, self.y + p*size + 2, d2, self.state)
     self.group:add(o1)
     self.group:add(o2)
     self:destroy()
 
   elseif orientation == 'vertical' then
-    local o1 = ChocolateObject(self.x - 4, self.y, d1, self.state)
-    local o2 = ChocolateObject(self.x + p*size + 4, self.y, d2, self.state)
+    local o1 = ChocolateObject(self.x - 2, self.y, d1, self.state)
+    local o2 = ChocolateObject(self.x + p*size + 2, self.y, d2, self.state)
     self.group:add(o1)
     self.group:add(o2)
     self:destroy()
@@ -72,6 +75,28 @@ function ChocolateObject:onCut(chocolateData, orientation, p, d1, d2)
 end
 
 function ChocolateObject:update(dt)
+  self.time = self.time + dt
+  if self.time < 0.3 then return end
+
+  for o in self.group:enumerate() do
+    local _, dx, dy = self:overlaps(o)
+    if -2 <= dx and dy >= 1 then
+      local a, b = self, o
+      if a.x > b.x then a, b = b, a end
+      a.x = a.x - 4*dt
+      b.x = b.x + 4*dt
+      break
+    end
+
+    if -2 <= dy and dx >= 1 then
+      local a, b = self, o
+      if a.y > b.y then a, b = b, a end
+      a.y = a.y - 4*dt
+      b.y = b.y + 4*dt
+      break
+    end
+  end
+
   if input:isReleased('mouse1') then
     local cutO, cutI = self:findCutline()
     if cutO then

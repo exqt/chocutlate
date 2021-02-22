@@ -26,6 +26,14 @@ function GameObjectGroup:update(dt)
   table.filterInplace(self.list, function(o) return not o._dead end)
 end
 
+function GameObjectGroup:enumerate()
+  return coroutine.wrap(function()
+    for i, o in ipairs(self.list) do
+      coroutine.yield(o)
+    end
+  end)
+end
+
 function GameObjectGroup:draw()
   for i=#self.list, 1, -1 do
     local o = self.list[i]
