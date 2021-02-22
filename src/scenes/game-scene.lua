@@ -99,8 +99,8 @@ function GameScene:reset()
 end
 
 function GameScene:requestAIMove()
-  if self.state:getWinner() then return end
   self.timer:after(0.05, function()
+    if self.state:getWinner() then return end
     self.aiRequestedTime = self.time
     self.ai:run(self.state)
   end)
