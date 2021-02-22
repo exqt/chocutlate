@@ -6,6 +6,7 @@ local GameObjectGroup = Class('GameObjectGroup')
 
 function GameObjectGroup:initialize()
   self.list = {} ---@type GameObject[]
+  self.active = true
 end
 
 function GameObjectGroup:add(o)
@@ -19,7 +20,12 @@ function GameObjectGroup:destory()
   end
 end
 
+function GameObjectGroup:foreach(fn)
+  for i, o in ipairs(self.list) do fn(o) end
+end
+
 function GameObjectGroup:update(dt)
+  if not self.active then return end
   for i, o in ipairs(self.list) do
     o:update(dt)
   end
@@ -35,6 +41,7 @@ function GameObjectGroup:enumerate()
 end
 
 function GameObjectGroup:draw()
+  if not self.active then return end
   for i=#self.list, 1, -1 do
     local o = self.list[i]
     o:draw()

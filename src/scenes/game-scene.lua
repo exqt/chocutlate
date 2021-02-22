@@ -34,6 +34,12 @@ function GameScene:initialize(mode)
       end
     end)
   end
+
+  self.state.onCut:add(function()
+    self.timer:after(0.1, function()
+      if self.state:getWinner() then self:onEnded() end
+    end)
+  end)
 end
 
 function GameScene:reset()
@@ -49,6 +55,25 @@ function GameScene:requestAIMove()
     self.aiRequestedTime = self.time
     self.ai:run(self.state)
   end)
+end
+
+function GameScene:onEnded()
+  local text = "?"
+  local winner = self.state:getWinner()
+  if self.mode == 'bot' then
+    if self.aiPlayer == winner then
+      text = "YOU LOSE"
+    else
+      text = "YOU WIN!"
+    end
+  elseif self.mode == '2p' then
+    text = tostring(winner) .. " WIN!"
+  end
+
+  local TextObject = require 'src.objects.text'
+  local winText = TextObject(0, 0, text)
+  winText:setCenterPosition(self.camera.x, -20)
+  self.objects:add(winText)
 end
 
 function GameScene:update(dt)
@@ -111,10 +136,6 @@ function GameScene:draw()
 
     drawStat(1, 4)
     drawStat(2, sw-44)
-    local winner = self.state:getWinner()
-    if winner then
-      g.print(winner, 16, 16)
-    end
 
     self:drawTransition()
   end, true)

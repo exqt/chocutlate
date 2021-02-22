@@ -10,12 +10,12 @@ function SelectScene:initialize()
   self.bg:setWrap("repeat", "repeat")
   self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
 
-  local Button = require 'src.objects.button'
+  local Text = require 'src.objects.text'
   local Image = require 'src.objects.image'
   local GameScene = require 'src.scenes.game-scene'
 
-  local buttonBot = Button(0, 0, "VS Bot")
-  local button2P = Button(0, 0, "2 Players")
+  local buttonBot = Text(0, 0, "VS Bot", true)
+  local button2P = Text(0, 0, "2 Players", true)
   self.objects:add(buttonBot)
   self.objects:add(button2P)
   buttonBot:setCenterPosition(0, 0)

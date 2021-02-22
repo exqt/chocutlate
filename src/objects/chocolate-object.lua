@@ -34,7 +34,7 @@ function ChocolateObject:initialize(x, y, chocolateData, state)
       local Crumbs = require 'src.objects.crumbs'
       local r, c = self.data:getDimensions()
       for i=1, r do for j=1, c do
-        self.parent.parent:add(Crumbs(self.x + (j-1)*size, self.y + (i-1)*size, self.data:get(i, j)))
+        self.parent:add(Crumbs(self.x + (j-1)*size, self.y + (i-1)*size, self.data:get(i, j)))
       end end
 
       self:destroy()
@@ -93,6 +93,7 @@ function ChocolateObject:update(dt)
   if self.time < 0.3 or self.nonSelectable then return end
 
   for o in self.parent:enumerate() do
+    if o.class ~= ChocolateObject then goto next end
     local _, dx, dy = self:overlaps(o)
     if -2 <= dx and dy >= 1 then
       local a, b = self, o
@@ -109,12 +110,16 @@ function ChocolateObject:update(dt)
       b.y = b.y + 4*dt
       break
     end
+    ::next::
   end
 
   if input:isReleased('mouse1') then
-    local cutO, cutI = self:findCutline()
-    if cutO then
-      self.state:cut(self.data, cutO, cutI)
+    local scene = scene ---@type GameScene
+    if not scene.ai or scene.aiPlayer ~= self.state.turn then
+      local cutO, cutI = self:findCutline()
+      if cutO then
+        self.state:cut(self.data, cutO, cutI)
+      end
     end
   end
 end
