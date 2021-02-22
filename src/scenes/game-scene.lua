@@ -22,16 +22,18 @@ function GameScene:initialize(mode)
   self.bg = assets.images.bg ---@type Image
   self.bg:setWrap("repeat", "repeat")
   self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
-  self.ai = AI(5)
 
-  self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
-    self.timer:after(0.5, function()
-      if self.state:getWinner() then return end
-      if self.state.turn == 2 then
-        self.ai:run(self.state)
+  self.mode = mode
+  if self.mode == '2p' then
+  elseif self.mode == 'bot' then
+    self.ai = AI(5)
+    self.aiPlayer = 2
+    self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
+      if self.state.turn ~= self.aiPlayer then
+        self:requestAIMove()
       end
     end)
-  end)
+  end
 end
 
 function GameScene:reset()
@@ -41,20 +43,30 @@ function GameScene:reset()
   end)
 end
 
+function GameScene:requestAIMove()
+  if self.state:getWinner() then return end
+  self.timer:after(0.05, function()
+    self.aiRequestedTime = self.time
+    self.ai:run(self.state)
+  end)
+end
+
 function GameScene:update(dt)
   Scene.update(self, dt)
 
-  if self.ai:getCount() == 1 then
-    local idx, orientation, p = unpack(self.ai:getResult())
-    self.state:cut(self.state.chocolates[idx], orientation, p)
+  if self.ai then
+    if self.ai:getCount() == 1 then
+      local idx, orientation, p = unpack(self.ai:getResult())
+      local sleepTime = math.max(0.5 - (self.time - self.aiRequestedTime), 0)
+      self.timer:after(sleepTime, function()
+        self.state:cut(self.state.chocolates[idx], orientation, p)
+      end)
+    end
   end
 
   if input:isPressed('mouse2') then
-    local score, action = AI(self.state, 4)
-    local idx, orientation, p = unpack(action)
-    print(score, idx, orientation)
-    self.state:cut(self.state.chocolates[idx], orientation, p)
   end
+
   if input:isPressed('mouse3') then
     self:reset()
   end
