@@ -3,6 +3,9 @@ local ChocolateData = require 'src.core.chocolate-data'
 ---@class GameState
 local GameState = Class('GameState')
 
+local ser = require 'lib.bitser'
+ser.registerClass('GameState', GameState)
+
 function GameState:initialize(clone)
   if clone then return end
   self.chocolates = {}

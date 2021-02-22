@@ -1,5 +1,9 @@
+local ser = require 'lib.bitser'
 ---@class ChocolateData
 local ChocolateData = Class('ChocolateData')
+
+local ser = require 'lib.bitser'
+ser.registerClass('ChocolateData', ChocolateData)
 
 function ChocolateData:initialize(pieces, pr, pc, qr, qc)
   if pieces then

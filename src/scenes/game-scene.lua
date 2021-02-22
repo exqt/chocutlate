@@ -19,15 +19,13 @@ function GameScene:initialize(mode)
   self.bg = assets.images.bg ---@type Image
   self.bg:setWrap("repeat", "repeat")
   self.bgQuad = love.graphics.newQuad(0, 0, 512, 512, 32, 32)
+  self.ai = AI(4)
 
   self.state.onCut:add(function(chocolate, orientation, p, d1, d2)
     self.timer:after(0.5, function()
       if self.state:getWinner() then return end
       if self.state.turn == 2 then
-        local score, action = AI(self.state, 4)
-        local idx, orientation, p = unpack(action)
-        print(score, idx, orientation)
-        self.state:cut(self.state.chocolates[idx], orientation, p)
+        self.ai:run(self.state)
       end
     end)
   end)
@@ -42,6 +40,12 @@ end
 
 function GameScene:update(dt)
   Scene.update(self, dt)
+
+  if self.ai:getCount() == 1 then
+    local idx, orientation, p = unpack(self.ai:getResult())
+    self.state:cut(self.state.chocolates[idx], orientation, p)
+  end
+
   if input:isPressed('mouse2') then
     local score, action = AI(self.state, 4)
     local idx, orientation, p = unpack(action)
@@ -60,10 +64,19 @@ function GameScene:draw()
   self.camera:render(function()
     self.bgQuad:setViewport(10*self.time, 10*self.time, 512, 512)
     g.draw(self.bg, self.bgQuad, -256, -256)
-    for i=#self.objects, 1, -1 do
-      local obj = self.objects[i]
-      obj:draw()
+    local drawObjects = function(x, y)
+      g.push()
+      g.translate(x, y)
+      for i=#self.objects, 1, -1 do
+        local obj = self.objects[i]
+        obj:draw()
+      end
+      g.pop()
     end
+    g.setShader(assets.shaders.shadow)
+    drawObjects(2, 2)
+    g.setShader()
+    drawObjects(0, 0)
   end)
   --ui
   self.camera:render(function()
